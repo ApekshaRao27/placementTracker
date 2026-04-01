@@ -1,0 +1,71 @@
+
+.register-card {
+  background: #ffffff;
+  padding: 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05); /* Soft professional shadow */
+  border: 1px solid #f0f0f0;
+}
+
+.form-label {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.custom-input {
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  transition: all 0.2s ease;
+}
+
+.custom-input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+  outline: none;
+}
+
+.btn-register {
+  padding: 0.75rem;
+  font-weight: 600;
+  border-radius: 8px;
+  background-color: #2563eb; /* A more modern professional blue */
+  border: none;
+  transition: background 0.2s ease;
+}
+
+.btn-register:hover {
+  background-color: #1d4ed8;
+}
+
+.register-card {
+  background: #ffffff;
+  padding: 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  border: 1px solid #f0f0f0;
+}
+
+.custom-input {
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+}
+
+/* Specific styling for the "Forgot Password" link to look subtle */
+a.small {
+  color: #6b7280;
+  font-size: 0.8rem;
+  transition: color 0.2s;
+}
+
+a.small:hover {
+  color: #2563eb;
+}
+
+/* Center the spinner in the button */
+.spinner-border-sm {
+  margin-bottom: 2px;
+}
