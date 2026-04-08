@@ -40,14 +40,6 @@
   background-color: #1d4ed8;
 }
 
-.register-card {
-  background: #ffffff;
-  padding: 2.5rem;
-  border-radius: 16px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-  border: 1px solid #f0f0f0;
-}
-
 .custom-input {
   padding: 0.75rem 1rem;
   border-radius: 8px;
