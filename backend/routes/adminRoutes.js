@@ -80,4 +80,27 @@ router.get("/dashboard", verifyAdmin, async (req, res) => {
   }
 });
 
+// GET a single drive with full student details
+router.get("/drives/:id", verifyAdmin, async (req, res) => {
+  try {
+    const drive = await PlacementDrive.findById(req.params.id)
+      // This is the "magic" that fetches the student names and emails
+      .populate("rounds.attendees", "name email")
+      .populate("rounds.cleared", "name email")
+      .populate("rounds.rejected", "name email");
+
+    if (!drive) {
+      return res.status(404).json({ msg: "Placement drive not found" });
+    }
+
+    res.json(drive);
+  } catch (err) {
+    console.error(err.message);
+    if (err.kind === 'ObjectId') {
+      return res.status(404).json({ msg: "Invalid Drive ID format" });
+    }
+    res.status(500).send("Server Error");
+  }
+});
+
 module.exports = router;

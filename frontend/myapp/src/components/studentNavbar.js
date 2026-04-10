@@ -1,7 +1,7 @@
-// src/components/Navbar.js
+// src/components/StudentNavbar.js
 import { Link, useNavigate, useLocation } from "react-router-dom";
 
-function Navbar() {
+function StudentNavbar() {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -10,45 +10,34 @@ function Navbar() {
     navigate("/");
   };
 
-  // Helper to check if a link is active
   const isActive = (path) => location.pathname === path;
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm" style={{ backgroundColor: "#1a252f" }}>
       <div className="container">
-        {/* Brand Logo */}
-        <Link className="navbar-brand fw-bold d-flex align-items-center" to="/admin/drives">
-          <span className="bg-primary text-white px-2 py-1 rounded me-2" style={{ fontSize: '0.9rem' }}>P</span>
-          Placement<span className="text-primary">Admin</span>
+        {/* Student Branding */}
+        <Link className="navbar-brand fw-bold d-flex align-items-center" to="/student/dashboard">
+          <span className="bg-success text-white px-2 py-1 rounded me-2" style={{ fontSize: '0.9rem' }}>S</span>
+          Placement<span className="text-success">Student</span>
         </Link>
 
-        {/* Mobile Toggle Button */}
         <button 
           className="navbar-toggler border-0" 
           type="button" 
           data-bs-toggle="collapse" 
-          data-bs-target="#navbarNav"
+          data-bs-target="#studentNav"
         >
           <span className="navbar-toggler-icon"></span>
         </button>
 
-        {/* Links & Actions */}
-        <div className="collapse navbar-collapse" id="navbarNav">
+        <div className="collapse navbar-collapse" id="studentNav">
           <ul className="navbar-nav ms-auto align-items-center">
             <li className="nav-item mx-lg-2">
               <Link 
-                to="/admin/drives" 
-                className={`nav-link px-3 transition-all ${isActive("/admin/drives") ? "active fw-bold text-white" : ""}`}
+                to="/student" 
+                className={`nav-link px-3 transition-all ${isActive("/student/dashboard") ? "active fw-bold text-white" : ""}`}
               >
-                Drives
-              </Link>
-            </li>
-            <li className="nav-item mx-lg-2">
-              <Link 
-                to="/admin/create-drive" 
-                className={`nav-link px-3 transition-all ${isActive("/admin/create-drive") ? "active fw-bold text-white" : ""}`}
-              >
-                Create Drive
+                Available Drives
               </Link>
             </li>
             <li className="nav-item ms-lg-3">
@@ -64,16 +53,11 @@ function Navbar() {
       </div>
 
       <style>{`
-        .navbar {
-          padding: 0.8rem 0;
-        }
-        .nav-link {
-          position: relative;
-          color: rgba(255,255,255,0.7) !important;
-        }
-        .nav-link:hover {
-          color: #fff !important;
-        }
+        .navbar { padding: 0.8rem 0; }
+        .nav-link { position: relative; color: rgba(255,255,255,0.7) !important; transition: all 0.3s ease; }
+        .nav-link:hover { color: #fff !important; }
+        
+        /* Using Green for students to differentiate from Admin Blue */
         .nav-link.active::after {
           content: "";
           position: absolute;
@@ -81,12 +65,10 @@ function Navbar() {
           left: 15%;
           width: 70%;
           height: 2px;
-          background-color: #0d6efd;
+          background-color: #198754; 
           border-radius: 2px;
         }
-        .transition-all {
-          transition: all 0.3s ease;
-        }
+        
         @media (max-width: 991px) {
           .nav-item { padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.1); width: 100%; }
           .btn { width: 100%; margin-top: 10px; }
@@ -96,4 +78,4 @@ function Navbar() {
   );
 }
 
-export default Navbar;
+export default StudentNavbar;
