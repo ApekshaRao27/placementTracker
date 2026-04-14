@@ -166,7 +166,7 @@ function DriveDetails() {
                                   className="btn btn-sm btn-success px-3 shadow-sm fw-bold"
                                   onClick={() => handleClearStudent(student._id, student.name)}
                                 >
-                                  Clear
+                                  Cleared
                                 </button>
                                 <button 
                                   className="btn btn-sm btn-outline-danger px-3 fw-bold"

@@ -4,7 +4,7 @@ const router = express.Router();
 const { verifyToken } = require("../middleware/authMiddleware"); // We can create a verifyStudent middleware later
 const PlacementDrive = require("../models/PlacementDrive");
 const Student = require("../models/User");
-
+const Notification = require("../models/Notification");
 router.get("/drives", verifyToken, async (req, res) => {
   try {
     const studentId = req.user.id;
@@ -94,6 +94,16 @@ router.post("/apply/:driveId", verifyToken, async (req, res) => {
     await drive.save();
 
     res.json({ msg: "Applied successfully" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.get("/notifications", verifyToken, async (req, res) => {
+  try {
+    const notifications = await Notification.find({ student: req.user.id })
+      .sort({ createdAt: -1 }); // Newest first
+    res.json(notifications);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

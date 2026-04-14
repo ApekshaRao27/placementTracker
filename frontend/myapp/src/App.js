@@ -5,7 +5,7 @@ import AdminDrives from "./pages/AdminDrives";
 import DriveDetails from "./pages/DriveDetails";
 import CreateDrive from "./pages/CreateDrive";
 import StudentDashboard from "./pages/StudentDashboard";
-
+import Notifications from "./pages/Notifications";
 function App() {
   return (
     <BrowserRouter>
@@ -16,6 +16,8 @@ function App() {
         <Route path="/admin/drives/:id" element={<DriveDetails />} />
         <Route path="/admin/create-drive" element={<CreateDrive />} />
         <Route path="/student" element={<StudentDashboard />} />
+        <Route path="/student/notifications" element={<Notifications />} />
+        
         {/* Redirect /admin to /admin/drives */}
         <Route path="/admin" element={<Navigate to="/admin/drives" />} />
       </Routes>

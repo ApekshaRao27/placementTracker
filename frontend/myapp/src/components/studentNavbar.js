@@ -1,21 +1,38 @@
 // src/components/StudentNavbar.js
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation} from "react-router-dom";
+import api from "../utils/api";
+import { useEffect, useState } from "react";
 
 function StudentNavbar() {
+  const [unreadCount, setUnreadCount] = useState(0);
   const navigate = useNavigate();
   const location = useLocation();
+
+  useEffect(() => {
+    fetchUnreadCount();
+  }, [location.pathname]); // Re-fetch when the page changes
+
+  const fetchUnreadCount = () => {
+    api.get("/student/notifications")
+      .then(res => {
+        // Only count notifications where isRead is false
+        const unread = res.data.filter(n => !n.isRead).length;
+        setUnreadCount(unread);
+      })
+      .catch(err => console.error("Notif error:", err));
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/");
   };
 
+  // Improved helper to handle different student sub-routes
   const isActive = (path) => location.pathname === path;
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm" style={{ backgroundColor: "#1a252f" }}>
       <div className="container">
-        {/* Student Branding */}
         <Link className="navbar-brand fw-bold d-flex align-items-center" to="/student/dashboard">
           <span className="bg-success text-white px-2 py-1 rounded me-2" style={{ fontSize: '0.9rem' }}>S</span>
           Placement<span className="text-success">Student</span>
@@ -40,6 +57,21 @@ function StudentNavbar() {
                 Available Drives
               </Link>
             </li>
+            
+            <li className="nav-item mx-lg-2">
+              <Link 
+                to="/student/notifications" 
+                className={`nav-link px-3 position-relative transition-all ${isActive("/student/notifications") ? "active fw-bold text-white" : ""}`}
+              >
+                Notifications
+                {unreadCount > 0 && (
+                  <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger shadow-sm" style={{ fontSize: '0.65rem', border: '2px solid #1a252f' }}>
+                    {unreadCount > 9 ? '9+' : unreadCount}
+                  </span>
+                )}
+              </Link>
+            </li>
+
             <li className="nav-item ms-lg-3">
               <button 
                 onClick={handleLogout} 
@@ -57,11 +89,10 @@ function StudentNavbar() {
         .nav-link { position: relative; color: rgba(255,255,255,0.7) !important; transition: all 0.3s ease; }
         .nav-link:hover { color: #fff !important; }
         
-        /* Using Green for students to differentiate from Admin Blue */
         .nav-link.active::after {
           content: "";
           position: absolute;
-          bottom: 0;
+          bottom: -2px;
           left: 15%;
           width: 70%;
           height: 2px;

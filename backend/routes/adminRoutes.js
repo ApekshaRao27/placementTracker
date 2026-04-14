@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { verifyAdmin } = require("../middleware/authMiddleware");
 const PlacementDrive = require("../models/PlacementDrive");
-
+const Notification = require("../models/Notification");
 // Create a new placement drive
 router.post("/drives", verifyAdmin, async (req, res) => {
   try {
@@ -133,13 +133,13 @@ router.post("/drives/:driveId/rounds/:roundIndex/clear/:studentId", verifyAdmin,
 
     await drive.save();
     res.json({ msg: "Student promoted successfully" });
+    const message = `Congratulations! You cleared the ${drive.rounds[index].name} round for ${drive.companyName}.`;
+await Notification.create({ student: studentId, message, type: "success" });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message });
   }
 });
-
-// backend/routes/adminRoutes.js
 
 router.post("/drives/:driveId/rounds/:roundIndex/reject/:studentId", verifyAdmin, async (req, res) => {
   try {
@@ -158,6 +158,8 @@ router.post("/drives/:driveId/rounds/:roundIndex/reject/:studentId", verifyAdmin
     drive.rounds[index].cleared = drive.rounds[index].cleared.filter(id => id.toString() !== studentId);
 
     await drive.save();
+    const rejectMsg = `We regret to inform you that you didn't clear the ${drive.rounds[index].name} round for ${drive.companyName}.`;
+await Notification.create({ student: studentId, message: rejectMsg, type: "danger" });
     res.json({ msg: "Student marked as rejected", drive });
   } catch (err) {
     res.status(500).json({ error: err.message });
