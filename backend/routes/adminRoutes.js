@@ -103,4 +103,65 @@ router.get("/drives/:id", verifyAdmin, async (req, res) => {
   }
 });
 
+// Clear a student from current round and move to next round
+router.post("/drives/:driveId/rounds/:roundIndex/clear/:studentId", verifyAdmin, async (req, res) => {
+  try {
+    const { driveId, roundIndex, studentId } = req.params;
+    const drive = await PlacementDrive.findById(driveId);
+    
+    if (!drive) return res.status(404).json({ msg: "Drive not found" });
+
+    const index = parseInt(roundIndex);
+    if (!drive.rounds[index]) return res.status(400).json({ msg: "Round not found" });
+
+    // 1. Check if student is already cleared (using string comparison)
+    const isAlreadyCleared = drive.rounds[index].cleared.some(id => id.toString() === studentId);
+    
+    if (!isAlreadyCleared) {
+      drive.rounds[index].cleared.push(studentId);
+    }
+
+    // 2. Move to next round attendees
+    const nextRoundIndex = index + 1;
+    if (drive.rounds[nextRoundIndex]) {
+      const isAlreadyInNextRound = drive.rounds[nextRoundIndex].attendees.some(id => id.toString() === studentId);
+      
+      if (!isAlreadyInNextRound) {
+        drive.rounds[nextRoundIndex].attendees.push(studentId);
+      }
+    }
+
+    await drive.save();
+    res.json({ msg: "Student promoted successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// backend/routes/adminRoutes.js
+
+router.post("/drives/:driveId/rounds/:roundIndex/reject/:studentId", verifyAdmin, async (req, res) => {
+  try {
+    const { driveId, roundIndex, studentId } = req.params;
+    const drive = await PlacementDrive.findById(driveId);
+    const index = parseInt(roundIndex);
+
+    if (!drive) return res.status(404).json({ msg: "Drive not found" });
+
+    // Mark as rejected in the current round
+    if (!drive.rounds[index].rejected.includes(studentId)) {
+      drive.rounds[index].rejected.push(studentId);
+    }
+
+    // Optional: If they were previously cleared, remove them from cleared
+    drive.rounds[index].cleared = drive.rounds[index].cleared.filter(id => id.toString() !== studentId);
+
+    await drive.save();
+    res.json({ msg: "Student marked as rejected", drive });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;
